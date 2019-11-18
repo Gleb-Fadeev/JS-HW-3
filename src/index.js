@@ -4,11 +4,29 @@ function searchField(rootClass) {
       this.name = name;
       this.price = price;
     }
+    draw() {
+      let card = document.createElement("div");
+      card.classList.add("card");
+      let cardTitle = document.createElement("h2");
+      cardTitle.innerHTML = this.name;
+      let cardPrice = document.createElement("h3");
+      cardPrice.innerHTML = this.price;
+      card.append(cardTitle, cardPrice);
+      return card;
+    }
   }
   class Products extends Card {
     constructor(name, price, date) {
       super(name, price);
       this.date = date;
+    }
+    draw() {
+      super.draw();
+      let cardCont = document.createElement("div");
+      let cardDate = document.createElement("h4");
+      cardDate.innerHTML = this.date;
+      cardCont.append(cardDate);
+      return cardCont;
     }
   }
   class Books extends Card {
@@ -16,11 +34,27 @@ function searchField(rootClass) {
       super(name, price);
       this.edition = edition;
     }
+    draw() {
+      super.draw();
+      let cardCont = document.createElement("div");
+      let cardEdition = document.createElement("h4");
+      cardEdition.innerHTML = this.edition;
+      cardCont.append(cardEdition);
+      return cardCont;
+    }
   }
   class Films extends Card {
     constructor(name, price, produser) {
       super(name, price);
       this.produser = produser;
+    }
+    draw() {
+      super.draw();
+      let cardCont = document.createElement("div");
+      let cardProduser = document.createElement("h4");
+      cardProduser.innerHTML = this.produsser;
+      cardCont.append(cardProduser);
+      return cardCont;
     }
   }
   const product1 = new Products("Milk", 100, "14.11.2019");
@@ -46,6 +80,7 @@ function searchField(rootClass) {
     film2,
     film3
   ];
+  console.log(book1.draw());
 
   function generateSearch() {
     let searchField = document.createElement("div");
@@ -54,72 +89,21 @@ function searchField(rootClass) {
     searchField.append(searchInput);
 
     searchInput.addEventListener("change", function() {
-      console.log(searchInput.value);
       let searchItem = searchInput.value;
-      for (let i = 0; i < cards.length; i++) {
-        cards[i].classList.add("hide");
-        if (cards[i].childNodes[0].innerHTML === searchItem) {
-          console.log(cards[i].childNodes[0].innerHTML);
-
-          cards[i].classList.remove("hide");
+      for (let i = 0; i < allCardArr.length; i++) {
+        if (searchItem === allCardArr[i].name) {
+          console.log(allCardArr[i].name);
+          allCardArr[i].draw();
         }
       }
     });
-
     return searchField;
-  }
-
-  function generateCard(obj) {
-    let card = document.createElement("div");
-    card.classList.add("card", "hide");
-    let cardTitle = document.createElement("h2");
-    cardTitle.innerHTML = obj.name;
-    // cardTitle.classList.add("hide");
-    let cardPrice = document.createElement("h3");
-    cardPrice.innerHTML = obj.price;
-    //cardPrice.classList.add("hide");
-    card.append(cardTitle, cardPrice);
-    if (obj.date) {
-      let cardDate = document.createElement("h4");
-      cardDate.innerHTML = obj.date;
-      // cardDate.classList.add("hide");
-      card.append(cardDate);
-    }
-    if (obj.edition) {
-      let cardDate = document.createElement("h4");
-      cardDate.innerHTML = obj.edition;
-      cardDate.classList.add("hide");
-      card.append(cardDate);
-    }
-    if (obj.produser) {
-      let cardDate = document.createElement("h4");
-      cardDate.innerHTML = obj.produser;
-      cardDate.classList.add("hide");
-      card.append(cardDate);
-    }
-    return card;
-  }
-  function generateAllCard(array) {
-    let containerCard = document.createElement("div");
-    containerCard.classList.add("container");
-    for (let i = 0; i < array.length; i++) {
-      containerCard.append(generateCard(array[i]));
-    }
-    return containerCard;
-  }
-  function generateScene(rootClass) {
-    let search = generateSearch();
-    let cards = generateAllCard(allCardArr);
-    console.log(cards[0]);
-
-    rootClass.append(search, cards);
   }
 
   const rootElement = document.getElementsByClassName(rootClass)[0];
   if (rootElement) {
-    generateScene(rootElement);
-    var cards = document.querySelectorAll(".card");
-    console.log(cards[0].innerHTML);
+    let search = generateSearch(rootElement);
+    rootElement.append(search);
   }
 }
 searchField("app");
